@@ -10,7 +10,6 @@ window.addEventListener("load", initApp);
 
 function initApp() {
     updatePostsGrid(); // update the grid of posts: get and show all posts
-    updateUsersGrid(); // update the grid of users: get and show all users
 
     // event listener
     document.querySelector("#btn-create-post").addEventListener("click", showCreatePostDialog);
@@ -101,38 +100,6 @@ async function updatePost(id, title, body, image) {
     // PUT fetch request with JSON in the body. Calls the specific element in resource
     // check if response is ok - if the response is successful
     // update the post grid to display all posts and the new post
-}
-
-// ============== users ============== //
-
-async function updateUsersGrid() {
-    const users = await getUsers(); // get users from rest endpoint and save in variable
-    showUsers(users); // show all users (append to the DOM) with users as argument
-}
-
-async function getUsers() {
-    const response = await fetch(`${endpoint}/users.json`); // fetch request, (GET)
-    const data = await response.json(); // parse JSON to JavaScript
-    const users = prepareData(data); // convert object of object to array of objects
-    return users;
-}
-
-function showUsers(listOfUsers) {
-    // for every user in listOfUsers, showUser
-    for (const user of listOfUsers) {
-        showUser(user);
-    }
-}
-
-function showUser(userObject) {
-    const html = /*html*/ `
-        <article class="grid-item">
-            <img src="${userObject.image}" />
-            <h3>${userObject.name}</h3>
-            <p>${userObject.title}</p>
-        </article>
-    `;
-    document.querySelector("#users").insertAdjacentHTML("beforeend", html);
 }
 
 // ============== helper function ============== //
