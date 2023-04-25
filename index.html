@@ -1,41 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="app.css" />
     <title>Post App</title>
-</head>
+  </head>
 
-<body>
+  <body>
     <header>
-        <h1>Post App with Firebase REST API</h1>
-        <button id="btn-create-post">Create New Post</button>
+      <h1>Post App with Firebase REST API</h1>
+      <button id="btn-create-post">Create New Post</button>
     </header>
 
-
-
     <main>
-
-        <section>
-            <h2>Posts</h2>
-            <section id="posts" class="grid-container"></section>
-        </section>
+      <section>
+        <h2>Posts</h2>
+        <section id="posts" class="grid-container"></section>
+      </section>
     </main>
 
-    <!-- dialog - create new post -->
-    <!-- to do  -->
+    <dialog id="dialog-create-post">
+      <form>
+        <lable for="postTitle">Title</lable>
+        <input
+          type="text"
+          name="title"
+          id="postTitle"
+          placeholder="Insert the title of your post"
+        />
+        <lable for="postBody">Body</lable>
+        <input
+          type="text"
+          name="body"
+          id="postBody"
+          placeholder="Insert the content of your post"
+        />
+        <lable>url</lable>
+        <input
+          type="url"
+          name="url"
+          id="postImage"
+          placeholder="Insert the image of your post"
+        />
+        <button type="submit">Create Posts</button>
+      </form>
+      <form method="dialog"><button>Close</button></form>
+    </dialog>
 
     <!-- dialog - update post -->
     <!-- to do  -->
 
-
     <!-- dialog - delete post -->
+    <dialog id="dialog-delete-post">
+      <h2>Do you wish to delete:</h2>
+      <p id="dialog-delete-posts-title">title</p>
+      <form method="dialog" id="form-delete-post">
+        <button type="button">no</button>
+        <button type="submit">yes</button>
+      </form>
+    </dialog>
     <!-- to do  -->
 
     <script src="app.js"></script>
-</body>
-
+  </body>
 </html>

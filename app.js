@@ -16,15 +16,39 @@ function initApp() {
   document
     .querySelector("#btn-create-post")
     .addEventListener("click", showCreatePostDialog);
+
+  document
+    .querySelector("#dialog-create-post")
+    .addEventListener("submit", createPostClicked);
+
+  document
+    .querySelector("#form-delete-post")
+    .addEventListener("submit", deletePostClicked);
 }
 
 // ============== events ============== //
 
 function showCreatePostDialog() {
   console.log("Create New Post clicked!");
+  document.querySelector("#dialog-create-post").showModal();
 }
 
-// todo
+function createPostClicked(event) {
+  event.preventDefault();
+  const form = event.target;
+
+  const title = form.title.value;
+  const body = form.body.value;
+  const image = form.url.value;
+
+  console.log(title);
+  console.log(body);
+  console.log(image);
+
+  createPost(title, body, image);
+  form.reset();
+  document.querySelector("#dialog-create-post").close();
+}
 
 // ============== posts ============== //
 
@@ -72,29 +96,55 @@ function showPost(postObject) {
     .addEventListener("click", updateClicked);
 
   // called when delete button is clicked
-  function deleteClicked() {
-    console.log("Update button clicked");
-    // to do
+  function deleteClicked(event) {
+    console.log("Delete button clicked");
+    document.querySelector("#dialog-delete-posts-title").textContent =
+      postObject.title;
+    document
+      .querySelector("#form-delete-post")
+      .setAttribute("data-id", postObject.id);
+
+    document.querySelector("#dialog-delete-post").showModal();
   }
 
   // called when update button is clicked
   function updateClicked() {
-    console.log("Delete button clicked");
+    console.log("update button clicked");
     // to do
   }
 }
 
 // Create a new post - HTTP Method: POST
 async function createPost(title, body, image) {
-  // create new post object
-  // convert the JS object to JSON string
-  // POST fetch request with JSON in the body
-  // check if response is ok - if the response is successful
-  // update the post grid to display all posts and the new post
+  const postObject = { title: title, body: body, image: image };
+  const postJSON = JSON.stringify(postObject);
+
+  const postResponse = await fetch(`${endpoint}/posts.json`, {
+    method: "POST",
+    body: postJSON,
+  });
+  const postData = await postResponse.json();
+
+  if (postResponse.ok) {
+    console.log("ok");
+    updatePostsGrid();
+  }
+}
+
+function deletePostClicked() {
+  console.log("delete this now");
 }
 
 // Update an existing post - HTTP Method: DELETE
 async function deletePost(id) {
+  const deleteResponse = await fetch(`${endpoint}/posts/${id}.json`, {
+    method: "DELETE",
+  });
+
+  if (deleteResponse.ok) {
+    console.log("Deleted");
+    updatePostsGrid();
+  }
   // DELETE fetch request
   // check if response is ok - if the response is successful
   // update the post grid to display posts
@@ -123,3 +173,22 @@ function prepareData(dataObject) {
   }
   return array; // return array back to "the caller"
 }
+
+//
+
+// function inputSearchChanged(event) {
+//   const value = event.target.value;
+//   console.log(value);
+//   const postsToShoq = searchPosts();
+// }
+
+// function searchPosts() {
+//   const searchValue = searchValue.toLowerCase();
+//   const results = posts.filter(checkTitle);
+
+//   function checkTitle(posts) {
+//     const title = post.title.toLowerCase();
+//     return title.includes(searchValue);
+//   }
+//   return results;
+// }
