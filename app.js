@@ -1,7 +1,7 @@
 "use strict";
 
 // ============== global variables ============== //
-const endpoint = "";
+const endpoint = "https://post-rest-api-default-rtdb.firebaseio.com";
 let posts;
 
 // ============== load and init app ============== //
@@ -12,7 +12,9 @@ function initApp() {
     updatePostsGrid(); // update the grid of posts: get and show all posts
 
     // event listener
-    document.querySelector("#btn-create-post").addEventListener("click", showCreatePostDialog);
+    document
+        .querySelector("#btn-create-post")
+        .addEventListener("click", showCreatePostDialog);
 }
 
 // ============== events ============== //
@@ -61,8 +63,12 @@ function showPost(postObject) {
     document.querySelector("#posts").insertAdjacentHTML("beforeend", html); // append html to the DOM - section#posts
 
     // add event listeners to .btn-delete and .btn-update
-    document.querySelector("#posts article:last-child .btn-delete").addEventListener("click", deleteClicked);
-    document.querySelector("#posts article:last-child .btn-update").addEventListener("click", updateClicked);
+    document
+        .querySelector("#posts article:last-child .btn-delete")
+        .addEventListener("click", deleteClicked);
+    document
+        .querySelector("#posts article:last-child .btn-update")
+        .addEventListener("click", updateClicked);
 
     // called when delete button is clicked
     function deleteClicked() {
