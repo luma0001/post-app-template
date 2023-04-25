@@ -105,6 +105,14 @@ function showPost(postObject) {
       .setAttribute("data-id", postObject.id);
 
     document.querySelector("#dialog-delete-post").showModal();
+
+    // deletePost is executed from deletePostClicked and the id is passed from deletePostClicked to deletePost as the id argument (parameter).
+
+    // deletePostClicked(postObject.id);
+
+    // document
+    //   .querySelector("#dialog-delete-post")
+    //   .addEventListener("submit", deletePostClicked);
   }
 
   // called when update button is clicked
@@ -131,8 +139,9 @@ async function createPost(title, body, image) {
   }
 }
 
-function deletePostClicked() {
+function deletePostClicked(id) {
   console.log("delete this now");
+  deletePost(id);
 }
 
 // Update an existing post - HTTP Method: DELETE
@@ -145,9 +154,6 @@ async function deletePost(id) {
     console.log("Deleted");
     updatePostsGrid();
   }
-  // DELETE fetch request
-  // check if response is ok - if the response is successful
-  // update the post grid to display posts
 }
 
 // Delete an existing post - HTTP Method: PUT
