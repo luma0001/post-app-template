@@ -118,6 +118,16 @@ function showPost(postObject) {
   // called when update button is clicked
   function updateClicked() {
     console.log("update button clicked");
+
+    const form = document.querySelector("form-update-post");
+    const title = title.form.value;
+    title = postObject.title;
+    const body = body.form.value;
+    const url = url.form.value;
+
+    // document
+    //   .querySelector("#dialog-update-post")
+    //   .addEventListener("data-id", postObject.id);
     // to do
   }
 }
