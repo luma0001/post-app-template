@@ -3,6 +3,8 @@
 // ============== global variables ============== //
 const endpoint =
   "https://luma0001-c50c8-default-rtdb.europe-west1.firebasedatabase.app/";
+
+//posts er global - her er putter vi alle vores elementer ind så vi kan filtre...
 let posts;
 
 // ============== load and init app ============== //
