@@ -12,6 +12,7 @@
     <header>
       <h1>Post App with Firebase REST API</h1>
       <button id="btn-create-post">Create New Post</button>
+      <input type="text" id="input-search" placeholder="search by title"></input>
     </header>
 
     <main>
@@ -46,18 +47,18 @@
         />
         <button type="submit">Create Posts</button>
       </form>
-      <form method="dialog"><button>Close</button></form>
+      <!-- <form method="dialog"><button>Close</button></form> -->
     </dialog>
 
     <!-- dialog - update post -->
-    <dialog id="dialog-update-posts">
+    <dialog id="dialog-update-post">
       <h2>update</h2>
       <form id="form-update-post">
-        <lable for="update-title">Title</lable>
+        <lable for="updatetitle">Title</lable>
         <input
           type="text"
           name="title"
-          id="update-title"
+          id="updatetitle"
           placeholder="update the title of your post"
         />
         <lable for="update-body">Body</lable>
@@ -83,7 +84,7 @@
       <h2>Do you wish to delete:</h2>
       <p id="dialog-delete-posts-title">title</p>
       <form method="dialog" id="form-delete-post">
-        <button type="button">no</button>
+        <button type="button" id="btn-close-dele-post">no</button>
         <button type="submit">yes</button>
       </form>
     </dialog>

@@ -24,6 +24,13 @@ function initApp() {
   document
     .querySelector("#form-delete-post")
     .addEventListener("submit", deletePostClicked);
+
+  document
+    .querySelector("#input-search")
+    .addEventListener("keyup", inputSearch);
+  document
+    .querySelector("#input-search")
+    .addEventListener("search", inputSearch);
 }
 
 // ============== events ============== //
@@ -54,7 +61,9 @@ function createPostClicked(event) {
 
 async function updatePostsGrid() {
   posts = await getPosts(); // get posts from rest endpoint and save in global variable
-  showPosts(posts); // show all posts (append to the DOM) with posts as argument
+  const sortPostsTitle = posts.sort(sortByTitle);
+  const sortPostsBody = posts.sort(sortByBody);
+  showPosts(sortPostsTitle); // show all posts (append to the DOM) with posts as argument
 }
 
 // Get all posts - HTTP Method: GET
@@ -100,35 +109,36 @@ function showPost(postObject) {
     console.log("Delete button clicked");
     document.querySelector("#dialog-delete-posts-title").textContent =
       postObject.title;
+
     document
       .querySelector("#form-delete-post")
       .setAttribute("data-id", postObject.id);
 
     document.querySelector("#dialog-delete-post").showModal();
 
-    // deletePost is executed from deletePostClicked and the id is passed from deletePostClicked to deletePost as the id argument (parameter).
-
-    // deletePostClicked(postObject.id);
-
-    // document
-    //   .querySelector("#dialog-delete-post")
-    //   .addEventListener("submit", deletePostClicked);
+    document
+      .querySelector("#btn-close-dele-post")
+      .addEventListener("click", closeDeleteDialog);
   }
 
   // called when update button is clicked
-  function updateClicked() {
+  function updateClicked(event) {
     console.log("update button clicked");
 
-    const form = document.querySelector("form-update-post");
-    const title = title.form.value;
-    title = postObject.title;
-    const body = body.form.value;
-    const url = url.form.value;
+    const formUpdate = document.querySelector("#form-update-post");
+    console.log(formUpdate.updatetitle.value);
 
-    // document
-    //   .querySelector("#dialog-update-post")
-    //   .addEventListener("data-id", postObject.id);
-    // to do
+    //Sætter ting ind i forms?
+    formUpdate.title.value = postObject.title;
+    formUpdate.body.value = postObject.body;
+    formUpdate.url.value = postObject.img;
+    //Sætter det der id som kan ses i konsollen et sted...
+    formUpdate.setAttribute("data-id", postObject.id);
+
+    document.querySelector("#dialog-update-post").showModal();
+    document
+      .querySelector("#form-update-post")
+      .addEventListener("submit", updatePostCliked);
   }
 }
 
@@ -149,9 +159,14 @@ async function createPost(title, body, image) {
   }
 }
 
-function deletePostClicked(id) {
+function closeDeleteDialog() {
+  document.querySelector("#dialog-delete-post").close();
+}
+
+function deletePostClicked(event) {
   console.log("delete this now");
-  deletePost(id);
+  const deleteId = event.target.getAttribute("data-id");
+  deletePost(deleteId);
 }
 
 // Update an existing post - HTTP Method: DELETE
@@ -166,13 +181,41 @@ async function deletePost(id) {
   }
 }
 
+function updatePostCliked(event) {
+  event.preventDefault();
+
+  const form = event.target;
+  console.log(form);
+
+  const title = form.title.value;
+  const body = form.body.value;
+  const image = form.url.value;
+  const id = form.getAttribute("data-id");
+  updatePost(id, title, body, image);
+
+  document.querySelector("#dialog-update-post").close();
+}
+
 // Delete an existing post - HTTP Method: PUT
 async function updatePost(id, title, body, image) {
   // post update to update
-  // convert the JS object to JSON string
-  // PUT fetch request with JSON in the body. Calls the specific element in resource
-  // check if response is ok - if the response is successful
-  // update the post grid to display all posts and the new post
+  // convert the JS object to JSON string.
+  const newObject = {
+    id: id,
+    title: title,
+    body: body,
+    image: image,
+  };
+
+  const jsonObject = JSON.stringify(newObject);
+  const postResponse = await fetch(`${endpoint}/posts/${id}.json`, {
+    method: "PUT",
+    body: jsonObject,
+  });
+
+  if (postResponse.ok) {
+    updatePostsGrid();
+  }
 }
 
 // ============== helper function ============== //
@@ -192,19 +235,29 @@ function prepareData(dataObject) {
 
 //
 
-// function inputSearchChanged(event) {
-//   const value = event.target.value;
-//   console.log(value);
-//   const postsToShoq = searchPosts();
-// }
+function inputSearch(event) {
+  const value = event.target.value;
+  console.log(value);
+  const postsToShow = searchPosts(value);
+  showPosts(postsToShow);
+}
 
-// function searchPosts() {
-//   const searchValue = searchValue.toLowerCase();
-//   const results = posts.filter(checkTitle);
+function searchPosts(searchValue) {
+  const searchVal = searchValue.toLowerCase();
+  const results = posts.filter(checkTitle);
 
-//   function checkTitle(posts) {
-//     const title = post.title.toLowerCase();
-//     return title.includes(searchValue);
-//   }
-//   return results;
-// }
+  function checkTitle(posts) {
+    const title = posts.title.toLowerCase();
+    return title.includes(searchVal);
+  }
+  return results;
+}
+
+//Der er ingen rigtig foreskel tror jeg?
+function sortByTitle(postA, postB) {
+  return postA.title.localeCompare(postB.title);
+}
+
+function sortByBody(postA, postB) {
+  return postA.body.localeCompare(postB.body);
+}
